@@ -7,6 +7,7 @@ const socket = new WebSocket('ws://localhost:1428')
 let playerId
 let action
 let entities = []
+let scoreTag = document.getElementById('score')
 
 setup()
 
@@ -27,6 +28,7 @@ function setup() {
             document.addEventListener('keypress', sendKeyPress)
         } else if (jsonData.event == 'gameUpdate') {
             gameUpdate([...jsonData.obstacles, jsonData.player])
+            displayScore(jsonData.score)
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
         }
@@ -54,6 +56,10 @@ function gameUpdate(updateEntities) {
             foundEntities[0].twoJsObject.translation.y = entity.y
         }
     })
+}
+
+function displayScore(score) {
+    scoreTag.innerHTML = score
 }
 
 function createTwoJsObject(entity) {
