@@ -51,6 +51,7 @@ function loop() {
 function gameUpdate(updateEntities) {
     // remove entities that no longer exist from the server
     entities = entities.filter(entity1 => updateEntities.some(entity2 => entity2.id === entity1.id))
+    // TODO: need to remove entities from two.js
 
     updateEntities.forEach(entity => {
         let foundEntities = entities.filter(x => x.id == entity.id)
