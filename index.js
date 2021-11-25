@@ -19,7 +19,6 @@ function setup() {
     })
     
     socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data)
         let jsonData = JSON.parse(event.data)
         
         if (jsonData.event == 'startup') {
@@ -74,8 +73,6 @@ function displayEndGame(){
         size: 50,
         family: 'Lato'
       });
-
-    
 }
 
 function displayAction(action) {
@@ -100,8 +97,8 @@ function createTwoJsObject(entity) {
 
 function sendKeyPress(){
     console.log('key pressed');
-    socket.send({
+    socket.send(JSON.stringify({
         event: action,
         id: playerId
-    });
+    }));
 }
