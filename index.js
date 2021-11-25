@@ -1,7 +1,7 @@
 const params = { fullscreen: false }
 const elem = document.getElementById('game')
 const two = new Two(params).appendTo(elem)
-two.renderer.setSize(800, 600)
+two.renderer.setSize(1200, 400)
 const socket = new WebSocket('ws://localhost:1428')
 
 let playerId
@@ -65,13 +65,15 @@ function displayScore(score) {
 }
 
 function displayEndGame(){
-    two.makeText('Game Over!', 400, 100, {
+    two.makeText('You Died', two.renderer.width / 2, 100, {
         size: 120,
-        family: 'Lato'
+        family: 'Lato',
+        fill: 'rgb(255, 0, 0)'
       });
-    two.makeText(`Final Score: ${scoreTag.innerHTML}`, 400, 200, {
+    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 200, {
         size: 50,
-        family: 'Lato'
+        family: 'Lato',
+        fill: 'rgb(255, 0, 0)'
       });
 }
 
@@ -95,8 +97,7 @@ function createTwoJsObject(entity) {
     return twoJsObject
 }
 
-function sendKeyPress(){
-    console.log('key pressed');
+function sendKeyPress() {
     socket.send(JSON.stringify({
         event: action,
         id: playerId
