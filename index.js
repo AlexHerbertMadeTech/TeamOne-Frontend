@@ -24,6 +24,7 @@ function setup() {
         if (jsonData.event == 'startup') {
             playerId = jsonData.id
             action = jsonData.action
+            document.addEventListener('keypress', sendKeyPress)
         } else if (jsonData.event == 'gameUpdate') {
             gameUpdate([...jsonData.obstacles, jsonData.player])
         } else {
@@ -68,4 +69,12 @@ function createTwoJsObject(entity) {
     twoJsObject.noStroke()
 
     return twoJsObject
+}
+
+function sendKeyPress(){
+    console.log('key pressed');
+    socket.send({
+        event: action,
+        id: playerId
+    });
 }
