@@ -1,5 +1,7 @@
 const runAnimation = ['./assets/run/adventurer-run-00.png', './assets/run/adventurer-run-01.png', './assets/run/adventurer-run-02.png', './assets/run/adventurer-run-03.png', './assets/run/adventurer-run-04.png', './assets/run/adventurer-run-05.png']
 const jumpAnimation = ['./assets/jump/adventurer-jump-00.png', './assets/jump/adventurer-jump-01.png', './assets/jump/adventurer-jump-02.png', './assets/jump/adventurer-jump-03.png']
+const duckAnimation = ['./assets/duck/adventurer-slide-00.png', './assets/duck/adventurer-slide-01.png']
+const attackAnimation = ['./assets/attack/adventurer-attack1-00.png', './assets/attack/adventurer-attack1-01.png', './assets/attack/adventurer-attack1-02.png', './assets/attack/adventurer-attack1-03.png', './assets/attack/adventurer-attack1-04.png']
 
 const params = { fullscreen: false }
 const elem = document.getElementById('game')
@@ -56,13 +58,25 @@ function loop() {
 
 function animationUpdate(actions, player) {
     if (actions.jumping && lastAction != 'jumping') {
-        console.log('jump')
+        console.log('Jump')
         lastAction = 'jumping'
         playerObject.remove()
         playerObject = two.makeImageSequence(jumpAnimation, 100, 450, 5, true);
         playerObject.scale = 3
-    } else if (lastAction != 'running' && !actions.jumping) {
-        console.log('run')
+    } else if (actions.ducking && lastAction != 'ducking') {
+        console.log('Duck')
+        lastAction = 'ducking'
+        playerObject.remove()
+        playerObject = two.makeImageSequence(duckAnimation, 100, 450, 2, true);
+        playerObject.scale = 3
+    } else if (actions.attacking && lastAction != 'attacking') {
+        console.log('Attack')
+        lastAction = 'attacking'
+        playerObject.remove()
+        playerObject = two.makeImageSequence(attackAnimation, 100, 450, 5, true);
+        playerObject.scale = 3
+    } else if (lastAction != 'running' && !actions.jumping && !actions.ducking && !actions.attacking) {
+        console.log('Run')
         lastAction = 'running'
         playerObject.remove()
         playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
