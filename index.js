@@ -2,12 +2,15 @@ const runAnimation = ['./assets/run/adventurer-run-00.png', './assets/run/advent
 const jumpAnimation = ['./assets/jump/adventurer-jump-00.png', './assets/jump/adventurer-jump-01.png', './assets/jump/adventurer-jump-02.png', './assets/jump/adventurer-jump-03.png']
 const duckAnimation = ['./assets/duck/adventurer-slide-00.png', './assets/duck/adventurer-slide-01.png']
 const attackAnimation = ['./assets/attack/adventurer-attack1-00.png', './assets/attack/adventurer-attack1-01.png', './assets/attack/adventurer-attack1-02.png', './assets/attack/adventurer-attack1-03.png', './assets/attack/adventurer-attack1-04.png']
+const backgroundAsset = ['./assets/background.png']
 
-const params = { fullscreen: false }
+const params = { fullscreen: false, type: Two.Types.webgl, width: 1200, height: 400 }
 const elem = document.getElementById('game')
 const two = new Two(params).appendTo(elem)
-two.renderer.setSize(1200, 400)
 const socket = new WebSocket('ws://localhost:1428')
+
+let background1 = two.makeImageSequence(backgroundAsset, 0, 200, 1, false)
+let background2 = two.makeImageSequence(backgroundAsset, 0, 200, 1, false)
 
 // Used because sprite doesn't quite line up
 const playerXOffset = 0
@@ -17,7 +20,7 @@ let playerId
 let action
 let entities = []
 let scoreTag = document.getElementById('score')
-let playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
+let playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true)
 playerObject.scale = 3
 let lastAction = 'running'
 
@@ -40,6 +43,7 @@ function setup() {
             document.addEventListener('keypress', sendKeyPress)
         } else if (jsonData.event == 'gameUpdate') {
             animationUpdate(jsonData.actions, jsonData.player)
+            backgroundUpdate(jsonData.backgroundPosition1, jsonData.backgroundPosition2)
             gameUpdate(jsonData.obstacles)
             displayScore(jsonData.score)
         } else if(jsonData.event == 'death') {
@@ -58,25 +62,21 @@ function loop() {
 
 function animationUpdate(actions, player) {
     if (actions.jumping && lastAction != 'jumping') {
-        console.log('Jump')
         lastAction = 'jumping'
         playerObject.remove()
-        playerObject = two.makeImageSequence(jumpAnimation, 100, 450, 5, true);
+        playerObject = two.makeImageSequence(jumpAnimation, 100, 450, 5, true)
         playerObject.scale = 3
     } else if (actions.ducking && lastAction != 'ducking') {
-        console.log('Duck')
         lastAction = 'ducking'
         playerObject.remove()
-        playerObject = two.makeImageSequence(duckAnimation, 100, 450, 2, true);
+        playerObject = two.makeImageSequence(duckAnimation, 100, 450, 2, true)
         playerObject.scale = 3
     } else if (actions.attacking && lastAction != 'attacking') {
-        console.log('Attack')
         lastAction = 'attacking'
         playerObject.remove()
-        playerObject = two.makeImageSequence(attackAnimation, 100, 450, 5, true);
+        playerObject = two.makeImageSequence(attackAnimation, 100, 450, 5, true)
         playerObject.scale = 3
     } else if (lastAction != 'running' && !actions.jumping && !actions.ducking && !actions.attacking) {
-        console.log('Run')
         lastAction = 'running'
         playerObject.remove()
         playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
@@ -85,6 +85,11 @@ function animationUpdate(actions, player) {
 
     playerObject.translation.x = player.x + playerXOffset
     playerObject.translation.y = player.y + playerYOffset
+}
+
+function backgroundUpdate(position1, position2) {
+    background1.translation.x = position1
+    background2.translation.x = position2
 }
 
 function gameUpdate(updateEntities) {
@@ -110,16 +115,18 @@ function displayScore(score) {
 }
 
 function displayEndGame(){
-    two.makeText('You Died', two.renderer.width / 2, 100, {
+    two.makeText('You Died', two.renderer.width / 2, 200, {
         size: 120,
         family: 'Dracula',
-        fill: '#8a0303'
-      });
-    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 200, {
+        fill: '#8a0303',
+        stroke: '#000000'
+    });
+    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
         size: 50,
         family: 'Dracula',
-        fill: '#8a0303'
-      });
+        fill: '#8a0303',
+        stroke: '#000000'
+    });
 }
 
 function displayAction(action) {
