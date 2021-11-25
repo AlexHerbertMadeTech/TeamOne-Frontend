@@ -11,7 +11,6 @@ let entities = []
 setup()
 
 function setup() {
-    gameUpdate([{id:1, x:100, y:100, height:10, width: 10}])
     window.requestAnimationFrame(loop)
 
     socket.addEventListener('open', function (event) {
@@ -34,7 +33,6 @@ function setup() {
 }
 
 function loop() {
-    gameUpdate([])
     two.update()
     window.requestAnimationFrame(loop)
 }
