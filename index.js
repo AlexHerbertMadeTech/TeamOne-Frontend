@@ -29,6 +29,8 @@ function setup() {
         } else if (jsonData.event == 'gameUpdate') {
             gameUpdate([...jsonData.obstacles, jsonData.player])
             displayScore(jsonData.score)
+        } else if(jsonData.event == 'death') {
+            displayEndGame();
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
         }
@@ -60,6 +62,19 @@ function gameUpdate(updateEntities) {
 
 function displayScore(score) {
     scoreTag.innerHTML = score
+}
+
+function displayEndGame(){
+    two.makeText('Game Over!', 400, 100, {
+        size: 120,
+        family: 'Lato'
+      });
+    two.makeText(`Final Score: ${scoreTag.innerHTML}`, 400, 200, {
+        size: 50,
+        family: 'Lato'
+      });
+
+    
 }
 
 function createTwoJsObject(entity) {
