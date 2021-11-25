@@ -4,7 +4,6 @@ const two = new Two(params).appendTo(elem)
 two.renderer.setSize(800, 600)
 const socket = new WebSocket('ws://localhost:1428')
 
-let rect
 let playerId
 let action
 let entities = []
@@ -12,7 +11,6 @@ let entities = []
 setup()
 
 function setup() {
-    drawSquare() // First time draw
     window.requestAnimationFrame(loop)
 
     socket.addEventListener('open', function (event) {
@@ -34,16 +32,7 @@ function setup() {
     })
 }
 
-function drawSquare() {
-    rect = two.makeRectangle(100, 100, 100, 100)
-    rect.fill = 'rgb(0, 200, 255)'
-    rect.opacity = 0.75
-    rect.noStroke()
-}
-
 function loop() {
-    rect.translation.x++;
-    rect.translation.y++;
     two.update()
     window.requestAnimationFrame(loop)
 }
@@ -56,10 +45,20 @@ function gameUpdate(updateEntities) {
     updateEntities.forEach(entity => {
         let foundEntities = entities.filter(x => x.id == entity.id)
         if (foundEntities.length == 0) {
-            // TODO: create new two.js object
-            entities.push(entity)
+            let twoJsObject = createTwoJsObject(entity)
+            entities.push({id: entity.id, twoJsObject: twoJsObject})
         } else if (foundEntities.length == 1) {
-            // TODO: update existing two.js object
+            foundEntities[0].twoJsObject.translation.x = entity.x
+            foundEntities[0].twoJsObject.translation.y = entity.y
         }
     })
+}
+
+function createTwoJsObject(entity) {
+    let twoJsObject =  two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
+    twoJsObject.fill = 'rgb(0, 200, 255)'
+    twoJsObject.opacity = 0.75
+    twoJsObject.noStroke()
+
+    return twoJsObject
 }
