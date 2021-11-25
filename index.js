@@ -25,7 +25,7 @@ function setup() {
             playerId = jsonData.id
             action = jsonData.action
         } else if (jsonData.event == 'gameUpdate') {
-            gameUpdate(jsonData.obstacles)
+            gameUpdate([...jsonData.obstacles, jsonData.player])
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
         }
@@ -57,7 +57,13 @@ function gameUpdate(updateEntities) {
 
 function createTwoJsObject(entity) {
     let twoJsObject =  two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
-    twoJsObject.fill = 'rgb(0, 200, 255)'
+    let colour
+    if (entity.type == 'player') {
+        colour = 'rgb(0, 200, 255)'
+    } else {
+        colour = 'rgb(200, 0, 255)'
+    }
+    twoJsObject.fill = colour
     twoJsObject.opacity = 0.75
     twoJsObject.noStroke()
 
