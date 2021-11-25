@@ -25,6 +25,7 @@ function setup() {
         if (jsonData.event == 'startup') {
             playerId = jsonData.id
             action = jsonData.action
+            displayAction(action)
             document.addEventListener('keypress', sendKeyPress)
         } else if (jsonData.event == 'gameUpdate') {
             gameUpdate([...jsonData.obstacles, jsonData.player])
@@ -75,6 +76,11 @@ function displayEndGame(){
       });
 
     
+}
+
+function displayAction(action) {
+    let actionTag = document.getElementById('action')
+    actionTag.innerHTML = action
 }
 
 function createTwoJsObject(entity) {
