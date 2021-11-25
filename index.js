@@ -25,7 +25,7 @@ function setup() {
             playerId = jsonData.id
             action = jsonData.action
         } else if (jsonData.event == 'gameUpdate') {
-            gameUpdate(jsonData.entities)
+            gameUpdate(jsonData.obstacles)
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
         }
