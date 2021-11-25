@@ -1,19 +1,20 @@
 <html>
-    <body>
-        <h1>Press any key to have fun!</h1>
-        <table >
+    <body style="background-color: black; color: #8a0303; font-family: 'Dracula', sans-serif; display:flex; flex-direction:column;">
+        <h1 style="align-self: center; font-size: 50pt;">Press any key to have fun!</h1>
+        <table style="align-self: center;">
             <tr>
-                <td style="width: 100px;">Action:</td>
-                <td id='action'></td>
-                <td style="width: 100px;">Score:</td>
-                <td id='score'>0</td>
+                <td style="width: 100px; font-size: 20pt;">Action:</td>
+                <td id='action' style="font-size: 20pt;"></td>
+                <td style="width: 100px; font-size: 20pt;">Score:</td>
+                <td id='score' style="font-size: 20pt;">0</td>
             </tr>
             <tr>
-                <td colspan="4" style="border: 5px solid black;"><div id="game"></div></td>
+                <td colspan="4" style="border: 5px solid"><div id="game"></div></td>
             </tr>
         </table>
     </body>
 
+    <link href="http://fonts.cdnfonts.com/css/dracula" rel="stylesheet">
     <script src="./two.min.js"></script>
     <script src="./index.js"></script>
 </html>

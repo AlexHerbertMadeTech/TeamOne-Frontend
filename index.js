@@ -112,13 +112,13 @@ function displayScore(score) {
 function displayEndGame(){
     two.makeText('You Died', two.renderer.width / 2, 100, {
         size: 120,
-        family: 'Lato',
-        fill: 'rgb(255, 0, 0)'
+        family: 'Dracula',
+        fill: '#8a0303'
       });
     two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 200, {
         size: 50,
-        family: 'Lato',
-        fill: 'rgb(255, 0, 0)'
+        family: 'Dracula',
+        fill: '#8a0303'
       });
 }
 
