@@ -11,6 +11,7 @@ let entities = []
 setup()
 
 function setup() {
+    gameUpdate([{id:1, x:100, y:100, height:10, width: 10}])
     window.requestAnimationFrame(loop)
 
     socket.addEventListener('open', function (event) {
@@ -33,14 +34,16 @@ function setup() {
 }
 
 function loop() {
+    gameUpdate([])
     two.update()
     window.requestAnimationFrame(loop)
 }
 
 function gameUpdate(updateEntities) {
     // remove entities that no longer exist from the server
+    entitiesToRemove = entities.filter(entity1 => !updateEntities.some(entity2 => entity2.id === entity1.id));
+    entitiesToRemove.forEach(entity => entity.twoJsObject.remove())
     entities = entities.filter(entity1 => updateEntities.some(entity2 => entity2.id === entity1.id))
-    // TODO: need to remove entities from two.js
 
     updateEntities.forEach(entity => {
         let foundEntities = entities.filter(x => x.id == entity.id)
