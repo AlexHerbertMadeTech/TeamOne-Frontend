@@ -1,13 +1,23 @@
+const runAnimation = ['./assets/run/adventurer-run-00.png', './assets/run/adventurer-run-01.png', './assets/run/adventurer-run-02.png', './assets/run/adventurer-run-03.png', './assets/run/adventurer-run-04.png', './assets/run/adventurer-run-05.png']
+const jumpAnimation = ['./assets/jump/adventurer-jump-00.png', './assets/jump/adventurer-jump-01.png', './assets/jump/adventurer-jump-02.png', './assets/jump/adventurer-jump-03.png']
+
 const params = { fullscreen: false }
 const elem = document.getElementById('game')
 const two = new Two(params).appendTo(elem)
 two.renderer.setSize(1200, 400)
 const socket = new WebSocket('ws://localhost:1428')
 
+// Used because sprite doesn't quite line up
+const playerXOffset = 0
+const playerYOffset = -4
+
 let playerId
 let action
 let entities = []
 let scoreTag = document.getElementById('score')
+let playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
+playerObject.scale = 3
+let lastAction = 'running'
 
 setup()
 
@@ -27,9 +37,11 @@ function setup() {
             displayAction(action)
             document.addEventListener('keypress', sendKeyPress)
         } else if (jsonData.event == 'gameUpdate') {
-            gameUpdate([...jsonData.obstacles, jsonData.player])
+            animationUpdate(jsonData.actions, jsonData.player)
+            gameUpdate(jsonData.obstacles)
             displayScore(jsonData.score)
         } else if(jsonData.event == 'death') {
+            playerObject.stop()
             displayEndGame();
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
@@ -40,6 +52,25 @@ function setup() {
 function loop() {
     two.update()
     window.requestAnimationFrame(loop)
+}
+
+function animationUpdate(actions, player) {
+    if (actions.jumping && lastAction != 'jumping') {
+        console.log('jump')
+        lastAction = 'jumping'
+        playerObject.remove()
+        playerObject = two.makeImageSequence(jumpAnimation, 100, 450, 5, true);
+        playerObject.scale = 3
+    } else if (lastAction != 'running' && !actions.jumping) {
+        console.log('run')
+        lastAction = 'running'
+        playerObject.remove()
+        playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
+        playerObject.scale = 3
+    }
+
+    playerObject.translation.x = player.x + playerXOffset
+    playerObject.translation.y = player.y + playerYOffset
 }
 
 function gameUpdate(updateEntities) {
@@ -83,16 +114,18 @@ function displayAction(action) {
 }
 
 function createTwoJsObject(entity) {
-    let twoJsObject =  two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
-    let colour
+    let twoJsObject
+
     if (entity.type == 'player') {
-        colour = 'rgb(0, 200, 255)'
+        twoJsObject = two.makeSprite('./assets/run.png', entity.x + playerXOffset, entity.y + playerYOffset, 8, 1, 15, true);
+        twoJsObject.scale = 3
+        playerObject = twoJsObject
     } else {
-        colour = 'rgb(200, 0, 255)'
+        twoJsObject = two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
+        twoJsObject.fill = 'rgb(200, 0, 255)'
+        twoJsObject.opacity = 0.75
+        twoJsObject.noStroke()
     }
-    twoJsObject.fill = colour
-    twoJsObject.opacity = 0.75
-    twoJsObject.noStroke()
 
     return twoJsObject
 }
