@@ -17,6 +17,8 @@ let background2 = two.makeImageSequence(backgroundAsset, 0, 200, 1, false)
 const playerXOffset = 0
 const playerYOffset = -4
 const jumpObstacleYOffset = -8
+const duckObstacleYOffset = 0
+const attackObstacleYOffset = -5
 
 let playerId
 let action
@@ -36,7 +38,7 @@ function setup() {
     })
 
     socket.addEventListener('close', function (event) {
-        playerObject.stop()
+        playerObject.pause()
     })
     
     socket.addEventListener('message', function (event) {
@@ -119,6 +121,12 @@ function gameUpdate(updateEntities) {
             if (entity.type == 'jumpObstacle') {
                 foundEntities[0].twoJsObject.translation.x = entity.x
                 foundEntities[0].twoJsObject.translation.y = entity.y + jumpObstacleYOffset
+            } else if (entity.type == 'duckObstacle') {
+                foundEntities[0].twoJsObject.translation.x = entity.x
+                foundEntities[0].twoJsObject.translation.y = entity.y + duckObstacleYOffset
+            } else if (entity.type == 'attackObstacle') {
+                foundEntities[0].twoJsObject.translation.x = entity.x
+                foundEntities[0].twoJsObject.translation.y = entity.y + attackObstacleYOffset
             } else {
                 foundEntities[0].twoJsObject.translation.x = entity.x
                 foundEntities[0].twoJsObject.translation.y = entity.y
@@ -135,14 +143,22 @@ function displayEndGame(){
     two.makeText('You Died', two.renderer.width / 2, 200, {
         size: 120,
         family: 'Dracula',
+        fill: '#8a0303',
+    });
+    two.makeText('You Died', two.renderer.width / 2, 200, {
+        size: 130,
+        family: 'Dracula',
         fill: '#000000',
-        stroke: '#8a0303'
     });
     two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
         size: 50,
         family: 'Dracula',
-        fill: '#000000',
-        stroke: '#8a0303'
+        fill: '#8a0303'
+    });
+    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
+        size: 60,
+        family: 'Dracula',
+        fill: '#000000'
     });
 }
 
@@ -155,7 +171,13 @@ function createTwoJsObject(entity) {
     let twoJsObject
 
     if (entity.type == 'jumpObstacle') {
-        twoJsObject = two.makeSprite('./assets/objects.png', entity.x, entity.y - jumpObstacleYOffset, 7, 12, 0, false);
+        twoJsObject = two.makeSprite('./assets/objects.png', entity.x, entity.y + jumpObstacleYOffset, 7, 12, 0, false);
+        twoJsObject.scale = 2
+    } else if (entity.type == 'duckObstacle') {
+        twoJsObject = two.makeSprite('./assets/bat.png', entity.x, entity.y + duckObstacleYOffset, 8, 1, 6, true);
+        twoJsObject.scale = 2
+    } else if (entity.type == 'attackObstacle') {
+        twoJsObject = two.makeSprite('./assets/wolf_attack.png', entity.x, entity.y + attackObstacleYOffset, 16, 1, 10, true);
         twoJsObject.scale = 2
     } else {
         twoJsObject = two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
