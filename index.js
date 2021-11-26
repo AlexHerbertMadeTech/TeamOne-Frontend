@@ -2,6 +2,7 @@ const runAnimation = ['./assets/run/adventurer-run-00.png', './assets/run/advent
 const jumpAnimation = ['./assets/jump/adventurer-jump-00.png', './assets/jump/adventurer-jump-01.png', './assets/jump/adventurer-jump-02.png', './assets/jump/adventurer-jump-03.png']
 const duckAnimation = ['./assets/duck/adventurer-slide-00.png', './assets/duck/adventurer-slide-01.png']
 const attackAnimation = ['./assets/attack/adventurer-attack1-00.png', './assets/attack/adventurer-attack1-01.png', './assets/attack/adventurer-attack1-02.png', './assets/attack/adventurer-attack1-03.png', './assets/attack/adventurer-attack1-04.png']
+const deathAnimation = ['./assets/death/adventurer-die-00.png', './assets/death/adventurer-die-01.png', './assets/death/adventurer-die-02.png', './assets/death/adventurer-die-03.png', './assets/death/adventurer-die-04.png', './assets/death/adventurer-die-05.png', './assets/death/adventurer-die-06.png']
 const backgroundAsset = ['./assets/background.png']
 
 const params = { fullscreen: false, type: Two.Types.webgl, width: 1200, height: 400 }
@@ -33,6 +34,10 @@ function setup() {
     socket.addEventListener('open', function (event) {
         console.log('Connected to server')
     })
+
+    socket.addEventListener('close', function (event) {
+        playerObject.stop()
+    })
     
     socket.addEventListener('message', function (event) {
         let jsonData = JSON.parse(event.data)
@@ -48,7 +53,13 @@ function setup() {
             gameUpdate(jsonData.obstacles)
             displayScore(jsonData.score)
         } else if(jsonData.event == 'death') {
-            playerObject.stop()
+            let playerX = playerObject.translation.x, playerY = playerObject.translation.y
+            playerObject.remove()
+            playerObject = two.makeImageSequence(deathAnimation, playerX, playerY, 2, false)
+            playerObject.scale = 3
+            playerObject.play(0, 7, () => {
+                playerObject.pause()
+            })
             displayEndGame();
         } else {
             console.log('Unexpceted event: ' + jsonData.event)
@@ -65,27 +76,27 @@ function animationUpdate(actions, player) {
     if (actions.jumping && lastAction != 'jumping') {
         lastAction = 'jumping'
         playerObject.remove()
-        playerObject = two.makeImageSequence(jumpAnimation, 100, 450, 5, true)
+        playerObject = two.makeImageSequence(jumpAnimation, player.x + playerXOffset, player.y + playerYOffset, 5, true)
         playerObject.scale = 3
     } else if (actions.ducking && lastAction != 'ducking') {
         lastAction = 'ducking'
         playerObject.remove()
-        playerObject = two.makeImageSequence(duckAnimation, 100, 450, 2, true)
+        playerObject = two.makeImageSequence(duckAnimation, player.x + playerXOffset, player.y + playerYOffset, 2, true)
         playerObject.scale = 3
     } else if (actions.attacking && lastAction != 'attacking') {
         lastAction = 'attacking'
         playerObject.remove()
-        playerObject = two.makeImageSequence(attackAnimation, 100, 450, 5, true)
+        playerObject = two.makeImageSequence(attackAnimation, player.x + playerXOffset, player.y + playerYOffset, 5, true)
         playerObject.scale = 3
     } else if (lastAction != 'running' && !actions.jumping && !actions.ducking && !actions.attacking) {
         lastAction = 'running'
         playerObject.remove()
-        playerObject = two.makeImageSequence(runAnimation, 100, 450, 8, true);
+        playerObject = two.makeImageSequence(runAnimation, player.x + playerXOffset, player.y + playerYOffset, 8, true);
         playerObject.scale = 3
+    } else {
+        playerObject.translation.x = player.x + playerXOffset
+        playerObject.translation.y = player.y + playerYOffset
     }
-
-    playerObject.translation.x = player.x + playerXOffset
-    playerObject.translation.y = player.y + playerYOffset
 }
 
 function backgroundUpdate(position1, position2) {
