@@ -31,6 +31,8 @@ let lastAction = 'running'
 setup()
 
 function setup() {
+    preloadAnimations()
+
     window.requestAnimationFrame(loop)
 
     socket.addEventListener('open', function (event) {
@@ -67,6 +69,21 @@ function setup() {
             console.log('Unexpceted event: ' + jsonData.event)
         }
     })
+}
+
+function preloadAnimations() {
+    // Load each animation then immediately ditch them. This means two loads the images into memory making them smoother later
+    let preload
+    preload = two.makeImageSequence(runAnimation, 0, 0, 0, false)
+    preload.remove()
+    preload = two.makeImageSequence(jumpAnimation, 0, 0, 0, false)
+    preload.remove()
+    preload = two.makeImageSequence(duckAnimation, 0, 0, 0, false)
+    preload.remove()
+    preload = two.makeImageSequence(attackAnimation, 0, 0, 0, false)
+    preload.remove()
+    preload = two.makeImageSequence(deathAnimation, 0, 0, 0, false)
+    preload.remove()
 }
 
 function loop() {
