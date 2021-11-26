@@ -15,6 +15,7 @@ let background2 = two.makeImageSequence(backgroundAsset, 0, 200, 1, false)
 // Used because sprite doesn't quite line up
 const playerXOffset = 0
 const playerYOffset = -4
+const jumpObstacleYOffset = -8
 
 let playerId
 let action
@@ -104,8 +105,13 @@ function gameUpdate(updateEntities) {
             let twoJsObject = createTwoJsObject(entity)
             entities.push({id: entity.id, twoJsObject: twoJsObject})
         } else if (foundEntities.length == 1) {
-            foundEntities[0].twoJsObject.translation.x = entity.x
-            foundEntities[0].twoJsObject.translation.y = entity.y
+            if (entity.type == 'jumpObstacle') {
+                foundEntities[0].twoJsObject.translation.x = entity.x
+                foundEntities[0].twoJsObject.translation.y = entity.y + jumpObstacleYOffset
+            } else {
+                foundEntities[0].twoJsObject.translation.x = entity.x
+                foundEntities[0].twoJsObject.translation.y = entity.y
+            }
         }
     })
 }
@@ -118,14 +124,14 @@ function displayEndGame(){
     two.makeText('You Died', two.renderer.width / 2, 200, {
         size: 120,
         family: 'Dracula',
-        fill: '#8a0303',
-        stroke: '#000000'
+        fill: '#000000',
+        stroke: '#8a0303'
     });
     two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
         size: 50,
         family: 'Dracula',
-        fill: '#8a0303',
-        stroke: '#000000'
+        fill: '#000000',
+        stroke: '#8a0303'
     });
 }
 
@@ -137,10 +143,9 @@ function displayAction(action) {
 function createTwoJsObject(entity) {
     let twoJsObject
 
-    if (entity.type == 'player') {
-        twoJsObject = two.makeSprite('./assets/run.png', entity.x + playerXOffset, entity.y + playerYOffset, 8, 1, 15, true);
-        twoJsObject.scale = 3
-        playerObject = twoJsObject
+    if (entity.type == 'jumpObstacle') {
+        twoJsObject = two.makeSprite('./assets/objects.png', entity.x, entity.y - jumpObstacleYOffset, 7, 12, 0, false);
+        twoJsObject.scale = 2
     } else {
         twoJsObject = two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
         twoJsObject.fill = 'rgb(200, 0, 255)'
