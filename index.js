@@ -18,7 +18,7 @@ const playerXOffset = 0
 const playerYOffset = -4
 const jumpObstacleYOffset = -8
 const duckObstacleYOffset = 0
-const attackObstacleYOffset = -5
+const attackObstacleYOffset = -16
 
 let playerId
 let action
@@ -195,7 +195,7 @@ function createTwoJsObject(entity) {
         twoJsObject.scale = 2
     } else if (entity.type == 'attackObstacle') {
         twoJsObject = two.makeSprite('./assets/wolf_attack.png', entity.x, entity.y + attackObstacleYOffset, 16, 1, 10, true);
-        twoJsObject.scale = 2
+        twoJsObject.scale = 3
     } else {
         twoJsObject = two.makeRectangle(entity.x, entity.y, entity.width, entity.height)
         twoJsObject.fill = 'rgb(200, 0, 255)'
