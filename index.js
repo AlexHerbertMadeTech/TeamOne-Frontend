@@ -139,26 +139,26 @@ function displayScore(score) {
     scoreTag.innerHTML = score
 }
 
-function displayEndGame(){
+function displayEndGame() {
+    two.makeText('You Died', two.renderer.width / 2, 200, {
+        size: 125,
+        family: 'Dracula',
+        fill: '#000000',
+    });
     two.makeText('You Died', two.renderer.width / 2, 200, {
         size: 120,
         family: 'Dracula',
         fill: '#8a0303',
     });
-    two.makeText('You Died', two.renderer.width / 2, 200, {
-        size: 130,
+    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
+        size: 52,
         family: 'Dracula',
-        fill: '#000000',
+        fill: '#000000'
     });
     two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
         size: 50,
         family: 'Dracula',
         fill: '#8a0303'
-    });
-    two.makeText(`Final Score: ${scoreTag.innerHTML}`, two.renderer.width / 2, 300, {
-        size: 60,
-        family: 'Dracula',
-        fill: '#000000'
     });
 }
 
