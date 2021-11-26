@@ -136,7 +136,7 @@ function gameUpdate(updateEntities) {
 }
 
 function displayScore(score) {
-    scoreTag.innerHTML = score
+    scoreTag.innerHTML = "Score: " + score
 }
 
 function displayEndGame() {
@@ -163,8 +163,8 @@ function displayEndGame() {
 }
 
 function displayAction(action) {
-    let actionTag = document.getElementById('action')
-    actionTag.innerHTML = action
+    let actionTag = document.getElementById(action)
+    actionTag.style.backgroundColor = '#FFBF00' 
 }
 
 function createTwoJsObject(entity) {

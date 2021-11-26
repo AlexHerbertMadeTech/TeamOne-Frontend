@@ -1,17 +1,55 @@
 <html>
-    <body style="background-color: black; color: #8a0303; font-family: 'Dracula', sans-serif; display:flex; flex-direction:column;">
-        <h1 style="align-self: center; font-size: 50pt;">Press any key to have fun!</h1>
-        <table style="align-self: center;">
-            <tr>
-                <td style="width: 100px; font-size: 20pt;">Action:</td>
-                <td id='action' style="font-size: 20pt;"></td>
-                <td style="width: 100px; font-size: 20pt;">Score:</td>
-                <td id='score' style="font-size: 20pt;">0</td>
-            </tr>
-            <tr>
-                <td colspan="4" style="border: 5px solid"><div id="game" style="background-color: grey;"></div></td>
-            </tr>
-        </table>
+    <style>
+        .action-container {
+            background-color: #8a0303;
+            color: black;
+            margin: 5px 10px 10px 5px;
+            padding: 10px 10px 10px 10px;
+            font-size: 18pt;
+        }
+    </style>
+
+    <body style="background-color: black; color: #8a0303; font-family: 'Dracula', sans-serif;">
+        <div id="main-container" style="display:flex; flex-direction:column; align-items: center;">
+            <h1 style="align-self: center; font-size: 50pt; margin: 20px 0px 0px 0px;">Press any key to have fun!</h1>
+            <p style="width: 800px; margin: 20px 0px 0px 0px;">
+                The evil count has stolen all of your loot! 
+                They must be defeated but their sinister mind control powers have left you uncoordinated. 
+                Now you must make your way through the long terrifying hallway within their mansion. 
+                Jumping clear over barrels, ducking under bats and attacking any wolves that attempt to get you first.
+            </p>
+            <p id='score' style="font-size: 30pt; margin: 20px 0px 20px 0px;">Score: 0</p>
+            <div id="game" style="background-color: grey; border: 5px solid; width: 1200px; height: 400px;"></div>
+
+            <div id="action-container" style="padding-top: 20px;">
+                <div id="howto" class="action-container">
+                    How to play: The action you have been assigned is shown in yellow. Press any key to do that action.
+                </div>
+                <div style="display: flex; flex-direction: row;">
+                    <div id="jump" class="action-container">
+                        <p>
+                            Jump: Used for getting over barrels
+                            <br><img src="./assets/barrel_on_its_own.png" width=100>
+                        </p>
+                    </div>
+                    <div id="duck" class="action-container">
+                        <p>
+                            Duck: Used for getting under bats
+                            <br><img src="./assets/bat_on_its_own.png" width=100>
+                        </p>
+                    </div>
+                    <div id="attack" class="action-container">
+                        <p>
+                            Attack: Used for getting rid of wolves
+                            <br><img src="./assets/wolf_on_its_own.png" width=100>
+                        </p>
+                    </div>
+                </div>
+                <div id="spectate" class="action-container">
+                    Spectate: Sit back and enjoy the show
+                </div>
+            </div>
+        </div>
     </body>
 
     <link href="http://fonts.cdnfonts.com/css/dracula" rel="stylesheet">
